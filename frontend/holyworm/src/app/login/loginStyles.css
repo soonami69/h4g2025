@@ -1,0 +1,21 @@
+:root {
+  --background: pink;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: black;
+    --foreground: pink;
+  }
+}
+
+body {
+  display: flex; /* Enable flexbox layout */
+  justify-content: center; /* Horizontally center the content */
+  align-items: center; /* Vertically center the content */
+  height: 100vh; /* Make sure the body takes up the full viewport height */
+  color: var(--foreground);
+  background: var(--background);
+  margin: 0; /* Remove default margin */
+}
