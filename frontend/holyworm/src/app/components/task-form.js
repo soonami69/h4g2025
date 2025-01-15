@@ -68,6 +68,8 @@ export default function TaskForm() {
     'Kelly Snyder',
   ];
 
+  const [title, setTitle] = useState(null);
+  const [description, setDescription] = useState(null);
   const [personName, setPersonName] = React.useState([]);
   const handleChangeName = (event) => {
     const {
@@ -109,6 +111,8 @@ export default function TaskForm() {
           <TextField
           label="Task Title"
           type="text"
+          value={title}
+          onChange={(newValue) => setTitle(newValue)}
           error={!!errors.taskTitle}
           helperText={errors.taskTitle?.message}
           fullWidth
@@ -130,6 +134,8 @@ export default function TaskForm() {
       <TextField
         label="Task Description"
         type="text"
+        value={description}
+        onChange={(newValue) => setDescription(newValue)}
         multiline
         rows={4}
         {...register("taskDescription", {
