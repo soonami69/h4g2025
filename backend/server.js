@@ -7,7 +7,9 @@ const app = express();
 const { MONGO_URL } = process.env;
 const PORT = 4000;
 
-const meetingRoute = require("./Routes/MeetingRoute");
+const userRoute = require("./routes/UserRoute");
+const meetingRoute = require("./routes/MeetingRoute");
+const taskRoute = require("./routes/TaskRoute");
 
 mongoose
   .connect(MONGO_URL, {
@@ -32,5 +34,6 @@ app.use(cookieParser());
 
 app.use(express.json());
 
-
+app.use("/users", userRoute);
 app.use("/meetings", meetingRoute);
+app.use("/tasks", taskRoute);
