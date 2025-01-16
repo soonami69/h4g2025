@@ -6,9 +6,19 @@ import { useRouter } from "next/navigation";
 
 const cabin = Cabin({ weight: "variable", style: "normal", subsets: ["latin"] });
 
-export default function MeetingCard({ meeting }) {
+const testData = {
+    description: "Discuss the roadmap for Q1 2025.",
+    _id: "12345",
+    title: "Quarterly Planning Meeting",
+    startTime: "2025-02-01T10:00:00Z",
+    endTime: "2025-02-01T12:00:00Z",
+    location: "Meeting Room 1",
+    users: ["Alice Johnson", "Bob Smith", "Charlie Brown"],
+};
+
+export default function MeetingCard({ meeting = testData }) {
     const router = useRouter();
-    const { description, _id, title, startTime, endTime, location, users } = meeting;
+    const { description, _id, title, startTime, endTime, location, users=[] } = meeting;
     const startTimeDate = new Date(startTime);
     const startDateString = startTimeDate.toLocaleDateString(undefined, {
         year: "numeric",

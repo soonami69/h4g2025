@@ -5,9 +5,18 @@ import { useRouter } from "next/navigation";
 
 const cabin = Cabin({ weight: "variable", style: "normal", subsets: ["latin"] });
 
+const testData = {
+    _id: "task123",
+    title: "Submit Report",
+    description: "Prepare and submit the monthly financial report.",
+    status: "incomplete", // Try changing this to "complete" to test styling
+    deadline: "2025-02-15T17:00:00Z",
+    users: ["Alice Johnson", "Bob Smith"],
+};
+
 export default function TaskCard({ task }) {
     const router = useRouter();
-    const { _id, title, description, status, deadline, users } = task;
+    const { _id, title, description, status = "unknown", deadline, users = [] } = task;
     const startTimeDate = new Date(deadline); // recycled code that's why the variable name sucks
     const deadlineDateString = startTimeDate.toLocaleDateString(undefined, {
         year: "numeric",
