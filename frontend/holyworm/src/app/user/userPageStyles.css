@@ -10,3 +10,11 @@
     align-self: center;
     justify-self: center;
 }
+
+.formWrapper {
+    font-weight: normal;
+}
+
+.email {
+    font-family: "Montserrat", sans-serif;
+}
