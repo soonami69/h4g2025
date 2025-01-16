@@ -4,7 +4,7 @@ import "./eventCard.css";
 export default function EventCard({eventInfo}) {
     const { type, description } = eventInfo.event.extendedProps;
     return (
-        <div onClick={() => console.log("pressed!")} className={(type === "meeting" ? "taskWrapper" : "meetingWrapper") + " mainWrapper"}>
+        <div className={(type === "meeting" ? "taskWrapper" : "meetingWrapper") + " mainWrapper"}>
             <strong>{eventInfo.timeText}</strong>
             <div>{eventInfo.event.title}</div>
             <div style={{ fontSize: "0.8em", color: "gray" }}>{description}</div>

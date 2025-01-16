@@ -8,7 +8,7 @@
     width: 50%;
     height: auto;
     border-radius: 50px;
-    padding: 30px 40px;
+    padding: 30px 40px 10px 40px;
     margin-top: 10px;
     flex-direction: column;
 }
@@ -45,7 +45,21 @@
     width: 50%;
     height: auto;
     border-radius: 50px;
-    padding: 30px 40px;
+    padding: 30px 40px 10px 40px;
     margin-top: 10px;
     flex-direction: column;
+}
+
+.editButton {
+    background-color: lightsteelblue;
+    padding: 3px 8px;
+    border-radius: 9px;
+    margin-top: 9px;
+}
+
+.editButtonTask {
+    background-color: #AFE1AF;
+    padding: 3px 8px;
+    border-radius: 9px;
+    margin-top: 9px;
 }

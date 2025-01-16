@@ -55,7 +55,7 @@ export default function Calendar() {
     };
 
     const editModal = () => {
-        router.push(`/edit/${selectedEvent.id}`);
+        router.push(`/edit/${selectedEvent.extendedProps.type}/${selectedEvent.id}`);
     }
 
     return (
