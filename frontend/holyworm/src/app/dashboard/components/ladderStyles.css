@@ -1,0 +1,33 @@
+.ladder-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 50%;
+    height: 70vh; /* Set the height of the container */
+    margin-top: 20px;
+    padding-left: 10%;
+}
+
+.ladder-leg {
+    background-color: #c0935c;
+    display: flex;
+    flex-direction: column;
+    border-radius: 50px;
+    width: 50px;
+    height: 100%; /* Matches the container height */
+}
+
+.ladder-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.ladder-step {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 20px solid #c0935c;
+    padding: 20px;
+    background-color: white;
+    height: 80px; /* Fixed height for better appearance */
+}
