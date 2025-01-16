@@ -1,7 +1,7 @@
-# HolyWorm: A Personal Assistant 
+# WonderWorm: A Personal Assistant 
   Designed for Singapore Book Council as part of Hack4Good 2025
 
-HolyWorm is a **Personal Assistant website** designed to streamline scheduling and email management for the Singapore Book Council. It includes functionalities for managing meetings, tasks, and emails, with a focus on enhancing productivity through **AI-driven email summarization**.
+WonderWorm is a **Personal Assistant website** designed to streamline scheduling and email management for the Singapore Book Council. It includes functionalities for managing meetings, tasks, and emails, with a focus on enhancing productivity through **AI-driven email summarization**.
 
 ---
 
