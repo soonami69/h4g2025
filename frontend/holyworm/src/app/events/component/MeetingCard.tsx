@@ -6,17 +6,8 @@ import { useRouter } from "next/navigation";
 
 const cabin = Cabin({ weight: "variable", style: "normal", subsets: ["latin"] });
 
-export default function MeetingCard({ meetingTrial }) {
+export default function MeetingCard({ meeting }) {
     const router = useRouter();
-    const meeting = {
-        description: "",
-        _id: "67889160da5f0596fa9eaa66",
-        title: "Project Kickoff Meeting",
-        startTime: "2023-11-01T10:00:00.000Z",
-        endTime: "2023-11-01T11:00:00.000Z",
-        location: "Conference Room A",
-        users: ["67889050da5f0596fa9eaa59", "67889058da5f0596fa9eaa5c"],
-    };
     const { description, _id, title, startTime, endTime, location, users } = meeting;
     const startTimeDate = new Date(startTime);
     const startDateString = startTimeDate.toLocaleDateString(undefined, {

@@ -14,9 +14,7 @@ export default function NavBar() {
     const router = useRouter();
 
     const routeToProfile = (email) => {
-        // TODO: HERE, MAKE A REQUEST FOR THE USER'S ACCOUNT ID, THEN ROUTE TO IT
-        const res = "TEST!";
-        router.push(`/user/${res}`);
+        router.push(`/user`);
     }
     return (
         <nav className="navbar">
