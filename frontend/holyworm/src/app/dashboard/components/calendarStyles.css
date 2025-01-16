@@ -1,0 +1,36 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+
+.fc .fc-button {
+    background-color: lightblue;
+    color: black;
+    border-width: 0;
+}
+
+.fc .fc-button:hover {
+    background-color: lightskyblue;
+    color: white;
+    border-width: 0;
+}
+
+.fc .fc-button:focus {
+    background-color: grey;
+    color: white;
+    border-width: 0;
+}
+
+.fc .fc-button-primary:not(:disabled).fc-button-active {
+    background-color: darkgray;
+    color: black;
+    font-weight: bold;
+}
+
+/* Apply font to the entire FullCalendar */
+.fc {
+    font-family: "Montserrat", serif; /* Change this to your desired font */
+}
+
+/* Optionally, you can apply fonts to specific sections */
+.fc-toolbar,
+.fc-header-toolbar {
+    font-family: "Verdana", sans-serif; /* Change toolbar font */
+}
