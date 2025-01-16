@@ -1,22 +1,23 @@
 const mongoose = require("mongoose");
 
-const meetingSchema = new mongoose.Schema({
+const taskSchema = new mongoose.Schema({
     title: {
         type: String,
         required: true,
         unique: true,
     },
-    startTime: {
-        type: Date, // stores both date and time
-        required: true,
-    },
-    endTime: {
-        type: Date, // stores both date and time
-        required: true,
-    },
-    location: {
+    description: {
         type: String,
-        required: true
+        default: "",
+    },
+    status: {
+        type: String,
+        default: "incomplete",
+    },
+    deadline: {
+        type: Date, // stores both date and time
+        default: "",
+        required: true,
     },
     users: [{
         type: mongoose.Schema.Types.ObjectId,
@@ -24,4 +25,4 @@ const meetingSchema = new mongoose.Schema({
     }]
 });
 
-module.exports = mongoose.model("Meeting", meetingSchema);
+module.exports = mongoose.model("Task", taskSchema);

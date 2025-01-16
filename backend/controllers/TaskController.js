@@ -1,112 +1,112 @@
-const Meeting = require("../models/MeetingModel");
+const Task = require("../models/TaskModel");
 const User = require("../models/UserModel");
 
-// create meeting
-module.exports.createMeeting = async (req, res) => {
+// create task
+module.exports.createTask = async (req, res) => {
     // users passed in as user ids
-    var { title, startTime, endTime, location, users } = req.body;
+    var { title, description, status, deadline, users } = req.body;
 
     try {
-        if (!title || !startTime || !endTime || !location || !users) {
+        if (!title || !deadline || !users) {
             return res.status(400).json({
                 success: false,
                 message: "Fill in required fields",
             });
         }
 
-        const existingMeeting = await Meeting.findOne({title, startTime, endTime, location, users});
-        if (existingMeeting) {
+        const existingTask = await Task.findOne({title, description, status, deadline, users});
+        if (existingTask) {
             return res.status(400).json({
                 success: false,
-                message: "Meeting already exists",
+                message: "Task already exists",
             })
         }
 
-        const meeting = await Meeting.create({
+        const task = await Task.create({
             title: title,
-            startTime: startTime,
-            endTime: endTime,
-            location: location,
+            description: description, 
+            status: status, 
+            deadline: deadline,
             users: users
         });
 
         await Promise.all(users.map(userId => 
             User.findByIdAndUpdate(userId, {
-                $push: { meetings: meeting._id }
+                $push: { tasks: task._id }
             }, { new: true })
         ));
 
         return res.status(200).json({
             success: true,
-            message: "Meeting is created",
-            data: meeting,
+            message: "Task is created",
+            data: task,
         })
     } catch (err) {
         console.log(err)
 
         return res.status(500).json({
             success: false,
-            message: "Meeting is not created",
+            message: "Task is not created",
             error: err.message,
         })
     }
 };
 
-// delete meeting
-module.exports.deleteMeeting = async (req, res) => {
+// delete task
+module.exports.deleteTask = async (req, res) => {
     // users passed in as user ids
     var { id } = req.params;
 
     try {
-        const deletedMeeting = await Meeting.findByIdAndDelete(id);
+        const deletedTask = await Task.findByIdAndDelete(id);
 
-        if (!deletedMeeting) {
+        if (!deletedTask) {
             return res.status(404).json({
                 success: false,
-                message: "Meeting not found",
+                message: "Task not found",
             });
         }
 
-        const users = deletedMeeting.users;
+        const users = deletedTask.users;
 
         await Promise.all(users.map(userId => 
             User.findByIdAndUpdate(userId, {
-                $pull: { meetings: deletedMeeting._id }
+                $pull: { tasks: deletedTask._id }
             }, { new: true })
         ));
 
         return res.status(200).json({
             success: true,
-            message: "Meeting is deleted",
-            data: deletedMeeting,
+            message: "Task is deleted",
+            data: deletedTask,
         })
     } catch (err) {
         return res.status(500).json({
             success: false,
-            message: "Meeting is not deleted",
+            message: "Task is not deleted",
             error: err.message,
         })
     }
 };
 
-// update meeting
-module.exports.updateMeeting = async (req, res) => {
+// update task
+module.exports.updateTask = async (req, res) => {
     try {
         const { id } = req.params;
-        const { title, startTime, endTime, location, users } = req.body;
+        const { title, description, status, deadline, users } = req.body;
 
-        // check if meeting exists
-        const existingMeeting = await Meeting.findById(id);
-        if (!existingMeeting) {
+        // check if task exists
+        const existingTask = await Task.findById(id);
+        if (!existingTask) {
             return res.status(404).json({
                 success: false,
-                message: "Meeting is not found",
+                message: "Task is not found",
             });
         }
 
         // check if new title already exists
         if (title) {
-            const existingTitle = await Meeting.findOne({title});
+            const existingTitle = await Task.findOne({title});
             if (existingTitle) {
                 return res.status(400).json({
                     success: false,
@@ -115,89 +115,89 @@ module.exports.updateMeeting = async (req, res) => {
             }
         }
         
-        // update meeting
-        const updatedMeeting = await Meeting.findByIdAndUpdate(id, {
+        // update task
+        const updatedTask = await Task.findByIdAndUpdate(id, {
             $set: req.body
         }, {new: true});
 
         // check for change in users
         if (users) {
-            const oldUsers = existingMeeting.users;
+            const oldUsers = existingTask.users;
             const newUsers = users;
 
-            // remove old meeting from old users
+            // remove old task from old users
             await Promise.all(oldUsers.map(userId => 
                 User.findByIdAndUpdate(userId, {
-                    $pull: { meetings: existingMeeting._id }
+                    $pull: { tasks: existingTask._id }
                 }, { new: true })
             ));
 
-            // add new meeting to new users
+            // add new task to new users
             await Promise.all(newUsers.map(userId => 
                 User.findByIdAndUpdate(userId, {
-                    $push: { meetings: updatedMeeting._id }
+                    $push: { tasks: updatedTask._id }
                 }, { new: true })
             ));
         }
 
         return res.status(200).json({
             success: true,
-            message: "Meeting is updated",
-            data: updatedMeeting,
+            message: "Task is updated",
+            data: updatedTask,
         });
 
-        // notify users of updated meeting
+        // notify users of updated task
     } catch (err) {
         return res.status(500).json({
             success: false,
-            message: "Meeting is not updated",
+            message: "Task is not updated",
             error: err.message,
         })
     }
 }
 
-// get meeting by id
-module.exports.getMeetingById = async (req, res) => {
+// get task by id
+module.exports.getTaskById = async (req, res) => {
     const { id } = req.params;
 
     try {
-        const meeting = await Meeting.findById(id);
+        const task = await Task.findById(id);
 
-        if (!meeting) {
+        if (!task) {
             return res.status(404).json({
                 success: false,
-                message: "Meeting is not found by ID",
+                message: "Task is not found by ID",
             });
         }
 
         return res.status(200).json({
             success: true,
-            message: "Meeting is fetched by ID",
-            data: meeting,
+            message: "Task is fetched by ID",
+            data: task,
         });
     } catch (err) {
         return res.status(500).json({
             success: false,
-            message: "Meeting is not fetched by ID",
+            message: "Task is not fetched by ID",
             error: err.message,
         });
     }
 }
 
-// get all meetings
-module.exports.getAllMeetings = async (req, res) => {
+// get all tasks
+module.exports.getAllTasks = async (req, res) => {
     try {
-        const meetings = await Meeting.find();
+        const tasks = await Task.find();
 
         return res.status(200).json({
             success: true,
-            message: "All meetings are fetched",
-            data: meetings,
+            message: "Tasks are fetched",
+            data: tasks,
         });
     } catch (err) {
         return res.status(500).json({
             success: false,
-            message: "All meetings are not fetched",
+            message: "Tasks are not fetched",
             error: err.message,
         });
     }
