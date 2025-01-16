@@ -19,6 +19,8 @@
     "@mui/material": "^6.4.0",
     "@mui/x-date-pickers": "^7.23.6",
     "dayjs": "^1.11.13",
+    "gapi-script": "^1.2.0",
+    "http-server": "^14.1.1",
     "next": "15.1.4",
     "next-auth": "^4.24.11",
     "react": "^19.0.0",
