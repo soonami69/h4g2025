@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { Montserrat } from "next/font/google";
 import "./dbStyles.css";
 import Calendar from "./components/calendar";
+import Ladder from "./components/ladder";
 
 const montserrat = Montserrat({ weight: "600", subsets: ["latin"] });
 
@@ -33,6 +34,7 @@ export default function Dashboard() {
             </h1>
             <div style={{ justifyContent: "center"}}>
                 <Calendar />
+                <Ladder />
             </div>
         </div>
     );

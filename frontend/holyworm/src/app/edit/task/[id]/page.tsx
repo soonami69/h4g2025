@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import "./editPageStyles.css";
 import axios from "axios";
+import { DatePicker } from "@mui/x-date-pickers";
 
 const trialData = {
     id: "1",
@@ -27,8 +28,10 @@ export default function EditTaskPage({ params }) {
     useEffect(() => {
         const fetchTask = async () => {
             try {
-                const res = await axios.get(`http://localhost:4000/tasks/${id}`, { withCredentials: true });
-                
+                const res = await axios.get(`http://localhost:4000/tasks/${id}`, {
+                    withCredentials: true,
+                });
+
                 if (res.data.success) {
                     const data = res.data.data;
                     setTask(data);
@@ -66,10 +69,14 @@ export default function EditTaskPage({ params }) {
 
         if (term.trim() !== "") {
             try {
-                const res = await axios.get(`http://localhost:4000/users`, { withCredentials: true });
+                const res = await axios.get(`http://localhost:4000/users`, {
+                    withCredentials: true,
+                });
                 if (res.data.success) {
                     const users = res.data.data;
-                    const data = users.filter((user) => user?.email.toLowerCase().includes(term.toLowerCase()));
+                    const data = users.filter((user) =>
+                        user?.email.toLowerCase().includes(term.toLowerCase())
+                    );
                     setSearchResults(data);
                 }
             } catch (error) {
@@ -98,7 +105,9 @@ export default function EditTaskPage({ params }) {
         e.preventDefault();
         try {
             console.log(formData);
-            const res = await axios.put(`http://localhost:4000/tasks/${id}`, formData, { withCredentials: true });
+            const res = await axios.put(`http://localhost:4000/tasks/${id}`, formData, {
+                withCredentials: true,
+            });
 
             if (res.data.success) {
                 router.push(`/dashboard`); // Redirect to task details
@@ -160,13 +169,15 @@ export default function EditTaskPage({ params }) {
                     </div>
                     <div className="formGroup">
                         <label htmlFor="deadline">Deadline:</label>
-                        <input
-                            type="datetime-local"
-                            id="deadline"
-                            name="deadline"
+                        <DatePicker
+                            label="Deadline"
                             value={formData.deadline}
-                            onChange={handleInputChange}
-                            required
+                            onChange={(newValue) => {
+                                setFormData((prevState) => ({
+                                    ...prevState,
+                                    deadline: newValue,
+                                }));
+                            }}
                         />
                     </div>
                     <div className="formGroup">
