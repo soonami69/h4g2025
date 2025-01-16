@@ -1,10 +1,12 @@
 import React from "react";
 import "./cardStyles.css";
 import { Cabin } from "next/font/google";
+import { useRouter } from "next/navigation";
 
 const cabin = Cabin({ weight: "variable", style: "normal", subsets: ["latin"] });
 
 export default function TaskCard({ taskTrial }) {
+    const router = useRouter();
     const task = {
         _id: "6788910bda5f0596fa9eaa62",
         title: "Sample Task",
@@ -59,6 +61,16 @@ export default function TaskCard({ taskTrial }) {
                         <p className="font-normal">{`• ${user}`}</p>
                     </div>
                 ))}
+            </div>
+            <div className="buttonWrapper flex w-auto flex-row justify-evenly">
+                <button
+                    onClick={() => {
+                        router.push(`/edit/task/${task._id}`);
+                    }}
+                    className={`${cabin.className} editButtonTask`}
+                >
+                    Edit
+                </button>
             </div>
         </div>
     );

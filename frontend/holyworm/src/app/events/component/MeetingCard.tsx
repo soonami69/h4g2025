@@ -1,10 +1,13 @@
-import React from "react";
+"use client";
+import React, { useEffect, useRef, useState } from "react";
 import "./cardStyles.css";
 import { Cabin } from "next/font/google";
+import { useRouter } from "next/navigation";
 
 const cabin = Cabin({ weight: "variable", style: "normal", subsets: ["latin"] });
 
 export default function MeetingCard({ meetingTrial }) {
+    const router = useRouter();
     const meeting = {
         description: "",
         _id: "67889160da5f0596fa9eaa66",
@@ -52,6 +55,16 @@ export default function MeetingCard({ meetingTrial }) {
                         <p className="font-normal">{`• ${user}`}</p>
                     </div>
                 ))}
+            </div>
+            <div className="buttonWrapper flex w-auto flex-row justify-evenly">
+                <button
+                    onClick={() => {
+                        router.push(`/edit/meeting/${meeting._id}`);
+                    }}
+                    className={`${cabin.className} editButton`}
+                >
+                    Edit
+                </button>
             </div>
         </div>
     );
