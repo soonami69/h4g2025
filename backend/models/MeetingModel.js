@@ -18,6 +18,12 @@ const meetingSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    description: {
+        type: String,
+        default: "",
+        required: true,
+        unique: true,
+    },
     users: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",

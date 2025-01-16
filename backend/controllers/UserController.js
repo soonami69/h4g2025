@@ -2,10 +2,10 @@ const User = require("../models/UserModel");
 
 // create user
 module.exports.createUser = async (req, res) => {
-    const { name, email } = req.body;
+    const { name, email, department, role} = req.body;
 
     try {
-        if (!name || !email) {
+        if (!name || !email || !department || !role) {
             return res.status(400).json({
                 success: false,
                 message: "Fill in required fields",
@@ -20,7 +20,7 @@ module.exports.createUser = async (req, res) => {
             });
         }
 
-        const user = await User.create({ name, email });
+        const user = await User.create({ name, email, department, role });
 
         res.status(200).json({
             success: true,
@@ -108,5 +108,52 @@ module.exports.getUserByEmail = async (req, res) => {
             message: "User is not fetched by email",
             error: err.message,
         });
+    }
+}
+
+// update User
+module.exports.updateUser = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { name, email, department, role, tasks, meetings} = req.body;
+
+        // check if user exists
+        const existingUser = await User.findById(id);
+        if (!existingUser) {
+            return res.status(404).json({
+                success: false,
+                message: "User is not found",
+            });
+        }
+
+        // check if new email already exists
+        if (email) {
+            const existingEmail = await User.findOne({email});
+            if (existingEmail) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Email already exists",
+                });
+            }
+        }
+        
+        // update user
+        const updatedUser = await User.findByIdAndUpdate(id, {
+            $set: req.body
+        }, {new: true});
+
+
+        return res.status(200).json({
+            success: true,
+            message: "User is updated",
+            data: updatedUser,
+        });
+
+    } catch (err) {
+        return res.status(500).json({
+            success: false,
+            message: "User is not updated",
+            error: err.message,
+        })
     }
 }

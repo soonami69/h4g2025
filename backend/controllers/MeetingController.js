@@ -4,17 +4,17 @@ const User = require("../models/UserModel");
 // create meeting
 module.exports.createMeeting = async (req, res) => {
     // users passed in as user ids
-    var { title, startTime, endTime, location, users } = req.body;
+    var { title, startTime, endTime, location, description, users } = req.body;
 
     try {
-        if (!title || !startTime || !endTime || !location || !users) {
+        if (!title || !startTime || !endTime || !location || !description || !users) {
             return res.status(400).json({
                 success: false,
                 message: "Fill in required fields",
             });
         }
 
-        const existingMeeting = await Meeting.findOne({title, startTime, endTime, location, users});
+        const existingMeeting = await Meeting.findOne({title, startTime, endTime, location, description, users});
         if (existingMeeting) {
             return res.status(400).json({
                 success: false,
@@ -27,6 +27,7 @@ module.exports.createMeeting = async (req, res) => {
             startTime: startTime,
             endTime: endTime,
             location: location,
+            description: description,
             users: users
         });
 
@@ -93,7 +94,7 @@ module.exports.deleteMeeting = async (req, res) => {
 module.exports.updateMeeting = async (req, res) => {
     try {
         const { id } = req.params;
-        const { title, startTime, endTime, location, users } = req.body;
+        const { title, startTime, endTime, location, description, users } = req.body;
 
         // check if meeting exists
         const existingMeeting = await Meeting.findById(id);
@@ -198,6 +199,44 @@ module.exports.getAllMeetings = async (req, res) => {
         return res.status(500).json({
             success: false,
             message: "All meetings are not fetched",
+            error: err.message,
+        });
+    }
+}
+
+
+// get list of users in meeting
+module.exports.getAllMeetingUsers = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const meeting = await Meeting.findById(id);
+
+        if (!meeting) {
+            return res.status(404).json({
+                success: false,
+                message: "Meeting is not found by ID",
+            });
+        }
+
+        usersList = meeting.users;
+
+        // Resolve all user promises concurrently
+        const userDocuments = await Promise.all(usersList.map(userId => User.findById(userId)));
+
+        // Extract names from the user documents
+        const names = userDocuments.map(user => user ? user.name : null);
+
+        return res.status(200).json({
+            success: true,
+            message: "Users in meeting is fetched by ID",
+            data: names,
+            // data: meeting.users
+        });
+    } catch (err) {
+        return res.status(500).json({
+            success: false,
+            message: "Users in meeting is not fetched by ID",
             error: err.message,
         });
     }
