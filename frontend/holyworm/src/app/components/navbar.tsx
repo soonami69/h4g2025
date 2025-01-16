@@ -7,6 +7,7 @@ import Image from "next/image";
 import "./navbarStyles.css";
 import NavLink from "./navLink";
 import { useRouter } from "next/navigation";
+import worm from "/Users/evedaktyl/Documents/h4g2025/frontend/holyworm/src/app/assets/worm.png";
 
 export default function NavBar() {
     const { data: session } = useSession();
@@ -18,6 +19,10 @@ export default function NavBar() {
     }
     return (
         <nav className="navbar">
+            {/* logo */} 
+            <div>
+                <Image src={worm} alt="Logo" width={60} height={60}></Image>
+            </div>
             {/* links */}
             <div className="navlinks">
                 <NavLink
