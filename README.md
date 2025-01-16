@@ -1,5 +1,5 @@
-# WonderWorm: A Personal Assistant 
-  Designed for Singapore Book Council as part of Hack4Good 2025
+# WonderWorm
+  A personal assistant designed for Singapore Book Council as part of Hack4Good 2025
 
 WonderWorm is a **Personal Assistant website** designed to streamline scheduling and email management for the Singapore Book Council. It includes functionalities for managing meetings, tasks, and emails, with a focus on enhancing productivity through **AI-driven email summarization**.
 
