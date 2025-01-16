@@ -5,8 +5,13 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import "./calendarStyles.css";
 import EventCard from "./eventCard";
+import { useRouter } from "next/navigation";
 
 export default function Calendar() {
+    const [modalStyle, setModalStyle] = useState({});
+    const [selectedEvent, setSelectedEvent] = useState(null);
+
+    // TODO: REPLACE WITH USE EFFECT API CALL TO OBTAIN EVENTS
     const [events, setEvents] = useState([
         {
             id: "1",
@@ -30,6 +35,29 @@ export default function Calendar() {
         },
     ]);
 
+    const handleEventClick = (clickInfo) => {
+        // Get event click position
+        const rect = clickInfo.el.getBoundingClientRect();
+
+        // Dynamically position the modal as a "speech bubble"
+        setModalStyle({
+            top: rect.top + window.scrollY + rect.height + 10, // Below the event
+            left: rect.left + window.scrollX, // Align left to event
+        });
+
+        setSelectedEvent(clickInfo.event);
+    };
+
+    const router = useRouter();
+
+    const closeModal = () => {
+        setSelectedEvent(null);
+    };
+
+    const editModal = () => {
+        router.push(`/edit/${selectedEvent.id}`);
+    }
+
     return (
         <div style={{ display: "flex", justifyContent: "center", width: "100%" }}>
             <div
@@ -43,12 +71,10 @@ export default function Calendar() {
                 <FullCalendar
                     plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
                     initialView="dayGridMonth"
-                    editable={true}
-                    selectable={true}
                     events={events}
                     height={600}
                     aspectRatio={2}
-                    eventContent={(eventInfo) => <EventCard eventInfo={eventInfo}/> }
+                    eventContent={(eventInfo) => <EventCard eventInfo={eventInfo} />}
                     buttonText={{
                         today: "Today",
                         month: "Month",
@@ -60,7 +86,31 @@ export default function Calendar() {
                         center: "title",
                         right: "dayGridMonth timeGridWeek timeGridDay",
                     }}
+                    eventClick={handleEventClick}
                 />
+                {selectedEvent && (
+                    <div
+                        className="custom-modal"
+                        style={modalStyle}
+                    >
+                        <div className="modal-content">
+                            <h3>{selectedEvent.title}</h3>
+                            <p className="modal-body">
+                                <strong>Time:</strong> {selectedEvent.start.toLocaleString()}
+                            </p>
+                            <p className="modal-body">
+                                <strong>Description:</strong>{" "}
+                                {selectedEvent.extendedProps.description}
+                            </p>
+                            <p className="modal-body">
+                                <strong>Type:</strong>{" "}
+                                {selectedEvent.extendedProps.type.toUpperCase()}
+                            </p>
+                            <button onClick={editModal}>Edit</button>
+                            <button onClick={closeModal}>Close</button>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );

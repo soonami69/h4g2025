@@ -2,9 +2,9 @@ import React from "react";
 import { useState } from "react";
 import Link from "next/link";
 import "./navbarStyles.css";
-import { Comic_Neue } from "next/font/google";
+import { Montserrat  } from "next/font/google";
 
-const comic = Comic_Neue({ weight: "400", subsets: ["latin"] });
+const comic = Montserrat({ weight: "400", subsets: ["latin"] });
 
 export default function NavLink({
     name,

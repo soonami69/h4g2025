@@ -1,0 +1,82 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+
+.mainWrapper {
+    background-color: #fadadd;
+    min-height: 100vh;
+    height: auto;
+    width: 100%;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    padding-top: 30px;
+}
+
+.headerText {
+    font-family: "Montserrat", serif;
+    font-weight: bold;
+    font-size: 25px;
+    border-bottom: 2px dashed black;
+}
+
+.bodyWrapper {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-evenly;
+    padding-top: 10px;
+}
+
+.meetingBoxWrapper {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    margin-top: 10px;
+    align-items: center;
+}
+
+.meetingButtons {
+    font-family: "Montserrat", serif;
+    height: max-content;
+    padding: 3px 10px;
+    border-radius: 15px;
+    margin-left: 4px;
+    margin-right: 4px;
+}
+
+.meetingButtons:active {
+    background-color: #CBC3E3;
+}
+
+.meetingButtons:disabled {
+    background-color: paleturquoise;
+    color: black;
+    font-weight: 500;
+}
+
+.taskBoxWrapper {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    margin-top: 10px;
+    align-items: center;
+}
+
+.taskButtons {
+    font-family: "Montserrat", serif;
+    height: max-content;
+    padding: 3px 10px;
+    border-radius: 15px;
+    margin-left: 4px;
+    margin-right: 4px;
+}
+
+.taskButtons:active {
+    background-color: #CBC3E3;
+}
+
+.taskButtons:disabled {
+    background-color: #DDF2D1;
+    color: black;
+    font-weight: 500;
+}
