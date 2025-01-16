@@ -11,6 +11,18 @@ const userSchema = new mongoose.Schema({
         required: true,
         unique: true,
     },
+    department: {
+        type: String,
+        default: "",
+        required: true,
+        unique: true,
+    },
+    role: {
+        type: String,
+        default: "",
+        required: true,
+        unique: true,
+    },
     tasks: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Task",
