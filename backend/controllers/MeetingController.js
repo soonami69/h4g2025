@@ -241,3 +241,24 @@ module.exports.getAllMeetingUsers = async (req, res) => {
         });
     }
 }
+
+// get all meetings of a specific user
+module.exports.getAllUserMeetings = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const meetings = await Meeting.find({ users: id });
+
+        return res.status(200).json({
+            success: true,
+            message: "All meetings of user are fetched",
+            data: meetings,
+        });
+    } catch (err) {
+        return res.status(500).json({
+            success: false,
+            message: "All meetings of user are not fetched",
+            error: err.message,
+        });
+    }
+}
