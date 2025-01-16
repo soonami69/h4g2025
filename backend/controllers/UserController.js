@@ -37,7 +37,7 @@ module.exports.createUser = async (req, res) => {
 }
 
 // get all users
-module.exports.getUsers = async (req, res) => {
+module.exports.getAllUsers = async (req, res) => {
     try {
         const users = await User.find();
 

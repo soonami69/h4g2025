@@ -6,19 +6,12 @@ const meetingSchema = new mongoose.Schema({
         required: true,
         unique: true,
     },
-    scheduleDate: {
-        type: String,
-        default: "",
-        required: true,
-    },
     startTime: {
-        type: String,
-        default: "",
+        type: Date, // stores both date and time
         required: true,
     },
     endTime: {
-        type: String,
-        default: "",
+        type: Date, // stores both date and time
         required: true,
     },
     location: {

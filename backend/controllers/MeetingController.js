@@ -1,19 +1,20 @@
 const Meeting = require("../models/MeetingModel");
 const User = require("../models/UserModel");
 
-async function createMeetingHelper(req, res) {
+// create meeting
+module.exports.createMeeting = async (req, res) => {
     // users passed in as user ids
-    var { title, scheduleDate, startTime, endTime, location, users } = req.body;
+    var { title, startTime, endTime, location, users } = req.body;
 
     try {
-        if (!title || !scheduleDate || !startTime || !endTime || !location || !users) {
+        if (!title || !startTime || !endTime || !location || !users) {
             return res.status(400).json({
                 success: false,
                 message: "Fill in required fields",
             });
         }
 
-        const existingMeeting = await Meeting.findOne({title, scheduleDate, startTime, endTime, location, users});
+        const existingMeeting = await Meeting.findOne({title, startTime, endTime, location, users});
         if (existingMeeting) {
             return res.status(400).json({
                 success: false,
@@ -23,20 +24,17 @@ async function createMeetingHelper(req, res) {
 
         const meeting = await Meeting.create({
             title: title,
-            scheduleDate: scheduleDate,
             startTime: startTime,
             endTime: endTime,
             location: location,
             users: users
         });
 
-        for (let i = 0; i < users.length; i++) {
-            const userId = users[i];
-            // update user meeting list
-            const updatedUser = await User.findByIdAndUpdate(userId, {
+        await Promise.all(users.map(userId => 
+            User.findByIdAndUpdate(userId, {
                 $push: { meetings: meeting._id }
-            }, {new: true});
-        }
+            }, { new: true })
+        ));
 
         return res.status(200).json({
             success: true,
@@ -52,15 +50,10 @@ async function createMeetingHelper(req, res) {
             error: err.message,
         })
     }
-}
-
-// create meeting
-module.exports.createMeeting = async (req, res) => {
-    // add logic for adding into user schema (helper function outside)
-    await createMeetingHelper(req, res);
 };
 
-async function deleteMeetingHelper(req, res) {
+// delete meeting
+module.exports.deleteMeeting = async (req, res) => {
     // users passed in as user ids
     var { id } = req.params;
 
@@ -76,13 +69,11 @@ async function deleteMeetingHelper(req, res) {
 
         const users = deletedMeeting.users;
 
-        for (let i = 0; i < users.length; i++) {
-            const userId = users[i];
-            // update user meeting list
-            const updatedUser = await User.findByIdAndUpdate(userId, {
+        await Promise.all(users.map(userId => 
+            User.findByIdAndUpdate(userId, {
                 $pull: { meetings: deletedMeeting._id }
-            }, {new: true});
-        }
+            }, { new: true })
+        ));
 
         return res.status(200).json({
             success: true,
@@ -90,29 +81,70 @@ async function deleteMeetingHelper(req, res) {
             data: deletedMeeting,
         })
     } catch (err) {
-        console.log(err)
-
         return res.status(500).json({
             success: false,
             message: "Meeting is not deleted",
             error: err.message,
         })
     }
-}
-
-// delete Meeting
-module.exports.deleteMeeting = async (req, res) => {
-    await deleteMeetingHelper(req, res);
 };
 
 // update meeting
 module.exports.updateMeeting = async (req, res) => {
     try {
-        // delete old meeting (helper function)
-        await deleteMeetingHelper(req, res);
+        const { id } = req.params;
+        const { title, startTime, endTime, location, users } = req.body;
 
-        // create new meeting (helper function)
-        await createMeetingHelper(req, res);
+        // check if meeting exists
+        const existingMeeting = await Meeting.findById(id);
+        if (!existingMeeting) {
+            return res.status(404).json({
+                success: false,
+                message: "Meeting is not found",
+            });
+        }
+
+        // check if new title already exists
+        if (title) {
+            const existingTitle = await Meeting.findOne({title});
+            if (existingTitle) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Title already exists",
+                });
+            }
+        }
+        
+        // update meeting
+        const updatedMeeting = await Meeting.findByIdAndUpdate(id, {
+            $set: req.body
+        }, {new: true});
+
+        // check for change in users
+        if (users) {
+            const oldUsers = existingMeeting.users;
+            const newUsers = users;
+
+            // remove old meeting from old users
+            await Promise.all(oldUsers.map(userId => 
+                User.findByIdAndUpdate(userId, {
+                    $pull: { meetings: existingMeeting._id }
+                }, { new: true })
+            ));
+
+            // add new meeting to new users
+            await Promise.all(newUsers.map(userId => 
+                User.findByIdAndUpdate(userId, {
+                    $push: { meetings: updatedMeeting._id }
+                }, { new: true })
+            ));
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "Meeting is updated",
+            data: updatedMeeting,
+        });
 
         // notify users of updated meeting
     } catch (err) {
@@ -147,6 +179,25 @@ module.exports.getMeetingById = async (req, res) => {
         return res.status(500).json({
             success: false,
             message: "Meeting is not fetched by ID",
+            error: err.message,
+        });
+    }
+}
+
+// get all meetings
+module.exports.getAllMeetings = async (req, res) => {
+    try {
+        const meetings = await Meeting.find();
+
+        return res.status(200).json({
+            success: true,
+            message: "All meetings are fetched",
+            data: meetings,
+        });
+    } catch (err) {
+        return res.status(500).json({
+            success: false,
+            message: "All meetings are not fetched",
             error: err.message,
         });
     }

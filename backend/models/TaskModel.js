@@ -10,14 +10,14 @@ const taskSchema = new mongoose.Schema({
         type: String,
         default: "",
     },
-    deadlineDate: {
+    status: {
         type: String,
+        default: "incomplete",
+    },
+    deadline: {
+        type: Date, // stores both date and time
         default: "",
         required: true,
-    },
-    deadlineTime: {
-        type: String,
-        default: "",
     },
     users: [{
         type: mongoose.Schema.Types.ObjectId,
