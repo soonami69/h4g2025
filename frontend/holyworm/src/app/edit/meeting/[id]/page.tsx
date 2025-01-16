@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import "./editPageStyles.css";
+import axios from "axios";
 
 const trialData = {
     id: "1",
@@ -23,9 +24,9 @@ export default function EditTaskPage({ params }) {
     // Fetch users from the database based on the search term
     const fetchUsers = async (query) => {
         try {
-            const response = await fetch(`/api/users?search=${encodeURIComponent(query)}`);
-            if (response.ok) {
-                const data = await response.json();
+            const response = await axios.get(`http://localhost:4000/users`, { withCredentials: true });
+            if (response.data.success) {
+                const data = response.data.data.filter((user) => user.email.toLowerCase().includes(query.toLowerCase()));
                 setSearchResults(data);
             } else {
                 console.error("Error fetching users:", response.statusText);
@@ -73,21 +74,15 @@ export default function EditTaskPage({ params }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch(`/api/tasks/${id}`, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(formData),
-            });
+            const response = await axios.put(`http://localhost:4000/meetings/${id}`, formData, { withCredentials: true });
 
-            if (response.ok) {
-                router.push(`/task/${id}`);
+            if (response.data.success) {
+                router.push(`/meeting/${id}`);
             } else {
                 console.error("Error updating task");
             }
         } catch (error) {
-            console.error("Error submitting task update:", error);
+            console.error("Error submitting meeting update:", error);
         }
     };
 

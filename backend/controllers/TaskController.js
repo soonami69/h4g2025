@@ -202,3 +202,24 @@ module.exports.getAllTasks = async (req, res) => {
         });
     }
 }
+
+// get all tasks of a specific user
+module.exports.getAllUserTasks = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const tasks = await Task.find({ users: id });
+
+        return res.status(200).json({
+            success: true,
+            message: "All tasks of user are fetched",
+            data: tasks,
+        });
+    } catch (err) {
+        return res.status(500).json({
+            success: false,
+            message: "All tasks of user are not fetched",
+            error: err.message,
+        });
+    }
+}
