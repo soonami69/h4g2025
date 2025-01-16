@@ -241,3 +241,42 @@ module.exports.getAllMeetingUsers = async (req, res) => {
         });
     }
 }
+
+const convertIdToName = async (id) => {
+    const user = await User.findById(id);
+    return user.name;
+}
+
+// get all meetings of a specific user
+module.exports.getAllUserMeetings = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        var meetings = await Meeting.find({ users: id });
+
+        const getUserNames = async (userIds) => {
+            const users = await User.find({ _id: { $in: userIds } });
+            return users.map(user => user.name);
+        };
+        
+        const meetingsWithUserNames = await Promise.all(meetings.map(async (meeting) => {
+            const userNames = await getUserNames(meeting.users);
+            return {
+                ...meeting._doc, // Spread the original meeting document
+                users: userNames // Replace users with user names
+            };
+        }));
+
+        return res.status(200).json({
+            success: true,
+            message: "All meetings of user are fetched",
+            data: meetingsWithUserNames,
+        });
+    } catch (err) {
+        return res.status(500).json({
+            success: false,
+            message: "All meetings of user are not fetched",
+            error: err.message,
+        });
+    }
+}
