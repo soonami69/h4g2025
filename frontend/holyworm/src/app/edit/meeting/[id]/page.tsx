@@ -15,7 +15,7 @@ const trialData = {
 export default function EditTaskPage({ params }) {
     const { id } = params;
 
-    const [formData, setFormData] = useState(trialData);
+    const [formData, setFormData] = useState(null);
     const [searchTerm, setSearchTerm] = useState("");
     const [searchResults, setSearchResults] = useState([]);
     const router = useRouter();
