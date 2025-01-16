@@ -208,12 +208,25 @@ module.exports.getAllUserTasks = async (req, res) => {
     const { id } = req.params;
 
     try {
-        const tasks = await Task.find({ users: id });
+        var tasks = await Task.find({ users: id });
+
+        const getUserNames = async (userIds) => {
+            const users = await User.find({ _id: { $in: userIds } });
+            return users.map(user => user.name);
+        };
+        
+        const tasksWithUserNames = await Promise.all(tasks.map(async (task) => {
+            const userNames = await getUserNames(task.users);
+            return {
+                ...task._doc, // Spread the original meeting document
+                users: userNames // Replace users with user names
+            };
+        }));
 
         return res.status(200).json({
             success: true,
             message: "All tasks of user are fetched",
-            data: tasks,
+            data: tasksWithUserNames,
         });
     } catch (err) {
         return res.status(500).json({

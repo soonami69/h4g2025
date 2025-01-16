@@ -4,34 +4,61 @@ import { useSession } from "next-auth/react";
 import "./eventStyles.css";
 import MeetingCard from "./component/MeetingCard";
 import TaskCard from "./component/TaskCard";
+import axios from "axios";
+
+const convertEmailToId = async (email) => {
+    const res = await axios.get(`http://localhost:4000/users/email/${email}`, { withCredentials: true });
+    if (res.data.success) {
+        return res.data.data._id;
+    }
+};
 
 export default function EventPage() {
+    const { data: session, status } = useSession();
     const [showUpcomingMeetings, setShowUpcomingMeetings] = useState(true);
     const [showUpcomingTasks, setShowUpcomingTasks] = useState(true);
     const [events, setEvents] = useState([]);
     const [tasks, setTasks] = useState([]);
 
     useEffect(() => {
-        // Mock data fetching for events
-        const fetchedEvents = [
-            { id: 1, title: "Team Meeting", date: "2025-01-18", completed: false },
-            { id: 2, title: "Project Update", date: "2025-01-15", completed: true },
-        ];
-        const filteredEvents = fetchedEvents.filter(
-            (event) => event.completed !== showUpcomingMeetings
-        );
-        setEvents(filteredEvents);
-    }, [showUpcomingMeetings]);
+        const fetchData = async () => {
+            var fetchedEvents = [];
+            var fetchedTasks = [];
 
-    useEffect(() => {
-        // Mock data fetching for tasks
-        const fetchedTasks = [
-            { id: 1, title: "Finish Report", deadline: "2025-01-20", completed: false },
-            { id: 2, title: "Submit Proposal", deadline: "2025-01-10", completed: true },
-        ];
-        const filteredTasks = fetchedTasks.filter((task) => task.completed !== showUpcomingTasks);
-        setTasks(filteredTasks);
-    }, [showUpcomingTasks]);
+            const fetchMeetings = async (userId) => {
+                const res = await axios.get(`http://localhost:4000/meetings/users/${userId}`, { withCredentials: true });
+                if (res.data.success) {
+                    fetchedEvents = res.data.data;
+                    console.log(fetchedEvents);
+                }
+            };
+
+            const fetchTasks = async (userId) => {
+                const res = await axios.get(`http://localhost:4000/tasks/users/${userId}`, { withCredentials: true });
+                if (res.data.success) {
+                    fetchedTasks = res.data.data;
+                    console.log(fetchedTasks);
+                }
+            };
+
+            if (session?.user?.email) {
+                const userId = await convertEmailToId(session.user.email);
+
+                await fetchMeetings(userId);
+                await fetchTasks(userId);
+
+                const filteredEvents = fetchedEvents.filter(
+                    (event) => (new Date(event.endTime) < new Date()) !== showUpcomingMeetings
+                );
+                setEvents(filteredEvents);
+
+                const filteredTasks = fetchedTasks.filter((task) => (task.status == "completed") !== showUpcomingTasks);
+                setTasks(filteredTasks);
+            }
+        };
+
+        fetchData();
+    }, [showUpcomingMeetings, showUpcomingTasks, session]);
 
     return (
         <div className="mainWrapper">
@@ -69,7 +96,7 @@ export default function EventPage() {
                         {events.length > 0 ? (
                             events.map((event) => (
                                 <MeetingCard
-                                    key={event.id}
+                                    key={event._id}
                                     meeting={event}
                                 />
                             ))
@@ -111,7 +138,7 @@ export default function EventPage() {
                         {tasks.length > 0 ? (
                             tasks.map((task) => (
                                 <TaskCard
-                                    key={task.id}
+                                    key={task._id}
                                     task={task}
                                 />
                             ))
