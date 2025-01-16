@@ -20,7 +20,7 @@ export default function NavBar() {
     return (
         <nav className="navbar">
             {/* logo */} 
-            <div>
+            <div style={{width: 200}}>
                 <Image src={worm} alt="Logo" width={60} height={60}></Image>
             </div>
             {/* links */}
@@ -45,7 +45,7 @@ export default function NavBar() {
                 />
             </div>
 
-            <div className="profile">
+            <div className="profile" style={{width:200, display: "flex", flexDirection: "row-reverse"}}>
                 {session?.user ? (
                     <div onClick={() => routeToProfile(session?.user?.email)} className="flex flex-row items-center">
                         <p className="profileName mr-5">{session?.user?.name}</p>
