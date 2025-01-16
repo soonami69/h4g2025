@@ -15,11 +15,14 @@
     "@fullcalendar/daygrid": "^6.1.15",
     "@fullcalendar/react": "^6.1.15",
     "@mui/material": "^6.4.0",
+    "@mui/x-date-pickers": "^7.23.6",
+    "dayjs": "^1.11.13",
     "next": "15.1.4",
     "next-auth": "^4.24.11",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-google-button": "^0.8.0"
+    "react-google-button": "^0.8.0",
+    "react-hook-form": "^7.54.2"
   },
   "devDependencies": {
     "@types/node": "22.10.6",
