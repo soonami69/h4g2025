@@ -39,7 +39,7 @@ const Gmail = () => {
     try {
       const response = await gapi.client.gmail.users.messages.list({
         userId: 'me',
-        maxResults: 15,
+        maxResults: 8,
       });
 
       const messageDetails = await Promise.all(
