@@ -139,6 +139,20 @@ export default function MeetingForm() {
         style={{ marginBottom: "16px" }}
       />
 
+        <TextField
+          label="Location"
+          type="text"
+          fullWidth
+          {...register("location", {
+            required: "Please provide a location",
+            pattern: {
+              value: /^[a-zA-Z0-9_.-\s]*$/,
+              message: "Invalid characters used",
+            },
+          })}
+          style={{ marginBottom: "16px" }}
+      />
+
       {/* Participants */}
       <FormControl fullWidth style={{ marginBottom: "16px" }}>
         <InputLabel id="demo-multiple-checkbox-label">Participants</InputLabel>
