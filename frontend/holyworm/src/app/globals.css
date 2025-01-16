@@ -4,14 +4,7 @@
 
 :root {
   --background: pink;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: black;
-    --foreground: pink;
-  }
+  --foreground: black;
 }
 
 body {
