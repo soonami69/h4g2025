@@ -1,0 +1,13 @@
+.dashboardWrapper {
+    height: 100%;
+    width: 100%;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-top: 30px;
+    background-color: #FADADD;
+    display: "flex";
+    flex: 1;
+}
+.dashboardWelcome {
+    font-size: 40px;
+}

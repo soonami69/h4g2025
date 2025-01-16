@@ -1,0 +1,29 @@
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    position: sticky;
+    top: 0;
+    width: auto;
+    z-index: 1000;
+    height: 80%;
+    margin: 0;
+    background-color: #fff3fa;
+}
+.navlinks {
+    display: flex;
+    justify-content: row;
+    align-items: center;
+    margin-left: 15px;
+}
+.linkWrapper {
+    margin-right: 25px;
+    background-color: pink;
+    padding: 7px 10px 7px 10px;
+    border-radius: 20px;
+}
+.profileImage {
+    width: 40px;
+    border-radius: 20px;
+}
