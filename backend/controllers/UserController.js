@@ -111,6 +111,34 @@ module.exports.getUserByEmail = async (req, res) => {
     }
 }
 
+// get name by email
+module.exports.getNameByEmail = async (req, res) => {
+    const { email } = req.params;
+
+    try {
+        const user = await User.findOne({ email });
+
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "User is not found by email",
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "Name is fetched by email",
+            data: user.name,
+        });
+    } catch(err) {
+        res.status(500).json({
+            success: false,
+            message: "Name is not fetched by email",
+            error: err.message,
+        });
+    }
+}
+
 // update User
 module.exports.updateUser = async (req, res) => {
     try {
