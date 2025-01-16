@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import "./editPageStyles.css";
+import axios from "axios";
 
 const trialData = {
     id: "1",
@@ -15,28 +16,32 @@ const trialData = {
 export default function EditTaskPage({ params }) {
     const { id } = params;
 
-    const [formData, setFormData] = useState(trialData);
+    const [formData, setFormData] = useState(null);
     const [task, setTask] = useState(formData); // TODO: Replace with `null` and fetch actual backend data
     const router = useRouter();
     const [searchTerm, setSearchTerm] = useState("");
     const [searchResults, setSearchResults] = useState([]);
-    const [assignedUsers, setAssignedUsers] = useState(trialData.users);
-
-    /*
+    const [assignedUsers, setAssignedUsers] = useState(formData?.users);
+    console.log(formData);
     // Fetch task data when the page loads
     useEffect(() => {
         const fetchTask = async () => {
             try {
-                const response = await fetch(`/api/tasks/${id}`); // Replace with actual API endpoint
-                const data = await response.json();
-                setTask(data);
-                setFormData({
-                    title: data.title,
-                    description: data.description,
-                    status: data.status,
-                    deadline: data.deadline,
-                    users: data.users,
-                });
+                const res = await axios.get(`http://localhost:4000/tasks/${id}`, { withCredentials: true });
+                
+                if (res.data.success) {
+                    const data = res.data.data;
+                    setTask(data);
+                    setFormData({
+                        id: data._id,
+                        title: data.title,
+                        description: data.description,
+                        status: data.status,
+                        deadline: data.deadline,
+                        users: data.users,
+                    });
+                    setAssignedUsers(data.users);
+                }
             } catch (error) {
                 console.error("Error fetching task data:", error);
             }
@@ -44,7 +49,6 @@ export default function EditTaskPage({ params }) {
 
         fetchTask();
     }, [id]);
-    */
 
     // Handle form input changes
     const handleInputChange = (e) => {
@@ -62,9 +66,12 @@ export default function EditTaskPage({ params }) {
 
         if (term.trim() !== "") {
             try {
-                const response = await fetch(`/api/users?search=${term}`);
-                const data = await response.json();
-                setSearchResults(data);
+                const res = await axios.get(`http://localhost:4000/users`, { withCredentials: true });
+                if (res.data.success) {
+                    const users = res.data.data;
+                    const data = users.filter((user) => user?.email.toLowerCase().includes(term.toLowerCase()));
+                    setSearchResults(data);
+                }
             } catch (error) {
                 console.error("Error fetching user search results:", error);
             }
@@ -90,17 +97,13 @@ export default function EditTaskPage({ params }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch(`/api/tasks/${id}`, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ ...formData, users: assignedUsers }),
-            });
+            console.log(formData);
+            const res = await axios.put(`http://localhost:4000/tasks/${id}`, formData, { withCredentials: true });
 
-            if (response.ok) {
-                router.push(`/task/${id}`); // Redirect to task details
+            if (res.data.success) {
+                router.push(`/dashboard`); // Redirect to task details
             } else {
+                console.log(res.data.message);
                 console.error("Error updating task");
             }
         } catch (error) {
@@ -169,7 +172,7 @@ export default function EditTaskPage({ params }) {
                     <div className="formGroup">
                         <label>Assigned Users:</label>
                         <ul>
-                            {assignedUsers.map((user) => (
+                            {assignedUsers?.map((user) => (
                                 <li key={user}>
                                     {user}{" "}
                                     <button
@@ -189,11 +192,11 @@ export default function EditTaskPage({ params }) {
                         />
                         <ul>
                             {searchResults.map((user) => (
-                                <li key={user}>
-                                    {user}{" "}
+                                <li key={user?.email}>
+                                    {user?.name}{" "}
                                     <button
                                         type="button"
-                                        onClick={() => handleAddUser(user)}
+                                        onClick={() => handleAddUser(user._id)}
                                     >
                                         Add
                                     </button>
