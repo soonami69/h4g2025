@@ -6,10 +6,18 @@ import { usePathname } from "next/navigation";
 import Image from "next/image";
 import "./navbarStyles.css";
 import NavLink from "./navLink";
+import { useRouter } from "next/navigation";
 
 export default function NavBar() {
     const { data: session } = useSession();
     const currentPath = usePathname();
+    const router = useRouter();
+
+    const routeToProfile = (email) => {
+        // TODO: HERE, MAKE A REQUEST FOR THE USER'S ACCOUNT ID, THEN ROUTE TO IT
+        const res = "TEST!";
+        router.push(`/user/${res}`);
+    }
     return (
         <nav className="navbar">
             {/* links */}
@@ -21,8 +29,8 @@ export default function NavBar() {
                     hoverColor="#966FD6"
                 />
                 <NavLink
-                    name="Meetings"
-                    link="/meetings"
+                    name="Events"
+                    link="/events"
                     defaultColor="#FF6962"
                     hoverColor="#850101"
                 />
@@ -36,13 +44,14 @@ export default function NavBar() {
 
             <div className="profile">
                 {session?.user ? (
-                    <>
+                    <div onClick={() => routeToProfile(session?.user?.email)} className="flex flex-row items-center">
+                        <p className="profileName mr-5">{session?.user?.name}</p>
                         <img
                             src={session.user.image}
                             alt="Profile"
                             className="profileImage"
                         />
-                    </>
+                    </div>
                 ) : (
                     <button
                         className="button"

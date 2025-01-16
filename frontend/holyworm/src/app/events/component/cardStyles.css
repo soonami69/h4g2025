@@ -1,0 +1,51 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400..700;1,400..700&display=swap');
+
+.meetingCardWrapper {
+    background-color: #B3EBF2;
+    flex: auto;
+    display: flex;
+    width: 50%;
+    height: auto;
+    border-radius: 50px;
+    padding: 30px 40px;
+    margin-top: 10px;
+    flex-direction: column;
+}
+
+.date {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.title {
+    font-family: "Montserrat", sans-serif;
+    font-weight: bold;
+}
+
+.timeWrapper {
+    display: flex;
+    flex-direction: column;
+    margin-right: 10px;
+}
+
+.time {
+    font-family: "Cabin", sans-serif;
+    font-weight: bold;
+}
+
+.peopleWrapper {
+    font-weight: bold;
+}
+
+.taskCardWrapper {
+    background-color: #DDF2D1;
+    flex: auto;
+    display: flex;
+    width: 50%;
+    height: auto;
+    border-radius: 50px;
+    padding: 30px 40px;
+    margin-top: 10px;
+    flex-direction: column;
+}
