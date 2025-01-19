@@ -5,8 +5,8 @@ import React from "react";
 import "./loginStyles.css";
 import { Comic_Neue } from 'next/font/google';
 import Image from "next/image";
-import worm from "/Users/evedaktyl/Documents/h4g2025/frontend/holyworm/src/app/assets/worm.png"
-import book from "/Users/evedaktyl/Documents/h4g2025/frontend/holyworm/src/app/assets/book2.png"
+import worm from "../assets/worm.png"
+import book from "../assets/book2.png"
 
 const comic = Comic_Neue({ weight: "400", subsets: ["latin"] });
 

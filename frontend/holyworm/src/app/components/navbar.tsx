@@ -7,7 +7,7 @@ import Image from "next/image";
 import "./navbarStyles.css";
 import NavLink from "./navLink";
 import { useRouter } from "next/navigation";
-import worm from "/Users/evedaktyl/Documents/h4g2025/frontend/holyworm/src/app/assets/worm.png";
+import worm from "../assets/worm.png";
 
 export default function NavBar() {
     const { data: session } = useSession();
